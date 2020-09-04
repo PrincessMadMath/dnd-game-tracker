@@ -6,6 +6,7 @@ using DndGameTracker.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -25,20 +26,20 @@ namespace DndGameTracker.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/<GamesController>
+        // GET: api/<CampaignsController>
         [HttpGet]
-        public async Task<IEnumerable<CampaignDto>> Get()
+        public async Task<IEnumerable<CampaignDto>> Get(CancellationToken cancellationToken = default)
         {
-            var campaigns = await this.mediator.Send(new GetCampaignsQuery());
+            var campaigns = await this.mediator.Send(new GetCampaignsQuery(), cancellationToken);
 
             return mapper.Map<IEnumerable<CampaignDto>>(campaigns);
         }
 
-        // GET api/<GamesController>/5
-        [HttpGet("{id}", Name = "GetCampaign")]
-        public async Task<IActionResult> Get(int id)
+        // GET api/<CampaignsController>/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id, CancellationToken cancellationToken = default)
         {
-            var campaign = await this.mediator.Send(new GetCampaignByIdQuery { Id = id });
+            var campaign = await this.mediator.Send(new GetCampaignByIdQuery { Id = id }, cancellationToken);
 
             if(campaign == null)
             {
@@ -48,22 +49,32 @@ namespace DndGameTracker.Controllers
             return Ok(mapper.Map<CampaignDto>(campaign));
         }
 
-        // POST api/<GamesController>
+        // POST api/<CampaignsController>
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] CreateCampaignCommand command)
+        public async Task<IActionResult> PostAsync([FromBody] CreateCampaignCommand command, CancellationToken cancellationToken = default)
         {
-            var campaign = await this.mediator.Send(command);
+            var campaign = await this.mediator.Send(command, cancellationToken);
 
-            return CreatedAtAction("GetCampaign", new { campaign.Id }, mapper.Map<CampaignDto>(campaign));
+            return CreatedAtAction("Get", new { campaign.Id }, mapper.Map<CampaignDto>(campaign));
         }
 
-        // PUT api/<GamesController>/5
+        // PUT api/<CampaignsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] UpdateCampaignCommand command, CancellationToken cancellationToken = default)
         {
+            command.Id = id;
+
+            var campaign = await this.mediator.Send(command, cancellationToken);
+
+            if(campaign == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(campaign);
         }
 
-        // DELETE api/<GamesController>/5
+        // DELETE api/<CampaignsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

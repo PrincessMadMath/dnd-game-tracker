@@ -14,6 +14,7 @@ namespace DndGameTracker.Data
                 .ReverseMap();
 
             CreateMap<CreateCampaignCommand, Campaign>();
+            CreateMap<UpdateCampaignCommand, Campaign>();
 
             CreateMap<CharacterDto, Character>()
                 .ReverseMap();
