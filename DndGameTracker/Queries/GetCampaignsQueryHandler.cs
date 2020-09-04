@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DndGameTracker.Queries
 {
@@ -19,7 +20,9 @@ namespace DndGameTracker.Queries
 
         public async Task<IList<Campaign>> Handle(GetCampaignsQuery request, CancellationToken cancellationToken)
         {
-            return await this.campaignRepository.GetAll().ToListAsync(cancellationToken);
+            return await this.campaignRepository.GetAll()
+                .Where(c => c.Deleted == false)
+                .ToListAsync(cancellationToken);
         }
     }
 }

@@ -1,21 +1,22 @@
-﻿using DndGameTracker.Entities;
+﻿using AutoMapper;
+using DndGameTracker.Entities;
 using DndGameTracker.Repositories;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DndGameTracker.Queries
+namespace DndGameTracker.Commands
 {
-    public class GetCampaignByIdQueryHandler : IRequestHandler<GetCampaignByIdQuery, Campaign>
+    public class DeleteCampaignCommandHandler : IRequestHandler<DeleteCampaignCommand, Campaign>
     {
         private readonly CampaignRepository campaignRepository;
 
-        public GetCampaignByIdQueryHandler(CampaignRepository campaignRepository)
+        public DeleteCampaignCommandHandler(CampaignRepository campaignRepository)
         {
             this.campaignRepository = campaignRepository;
         }
 
-        public async Task<Campaign> Handle(GetCampaignByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Campaign> Handle(DeleteCampaignCommand request, CancellationToken cancellationToken)
         {
             var campaign = await this.campaignRepository.FindAsync(new object[] { request.Id }, cancellationToken);
 
@@ -24,7 +25,9 @@ namespace DndGameTracker.Queries
                 return null;
             }
 
-            return campaign;
+            campaign.Deleted = true;
+
+            return await this.campaignRepository.UpdateAsync(campaign, cancellationToken);
         }
     }
 }

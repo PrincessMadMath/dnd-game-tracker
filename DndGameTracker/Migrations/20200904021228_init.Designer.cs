@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DndGameTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200904002638_init")]
+    [Migration("20200904021228_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,6 +93,9 @@ namespace DndGameTracker.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -104,6 +107,7 @@ namespace DndGameTracker.Migrations
                         new
                         {
                             Id = 1,
+                            Deleted = true,
                             Name = "Dragon Wild"
                         });
                 });

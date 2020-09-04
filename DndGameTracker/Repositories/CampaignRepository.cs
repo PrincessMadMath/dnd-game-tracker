@@ -1,5 +1,6 @@
 ﻿using DndGameTracker.Data;
 using DndGameTracker.Entities;
+using System.Linq;
 
 namespace DndGameTracker.Repositories
 {

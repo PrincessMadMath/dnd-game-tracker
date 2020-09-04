@@ -52,7 +52,8 @@ namespace DndGameTracker.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,8 +188,8 @@ namespace DndGameTracker.Migrations
 
             migrationBuilder.InsertData(
                 table: "Campaigns",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Dragon Wild" });
+                columns: new[] { "Id", "Deleted", "Name" },
+                values: new object[] { 1, true, "Dragon Wild" });
 
             migrationBuilder.InsertData(
                 table: "Characters",

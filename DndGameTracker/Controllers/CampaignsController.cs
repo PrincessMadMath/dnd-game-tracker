@@ -76,8 +76,16 @@ namespace DndGameTracker.Controllers
 
         // DELETE api/<CampaignsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
+            var campaign = await this.mediator.Send(new DeleteCampaignCommand { Id = id }, cancellationToken);
+
+            if (campaign == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
     }
 }

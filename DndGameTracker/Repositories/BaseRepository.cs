@@ -47,5 +47,11 @@ namespace DndGameTracker.Repositories
             this.applicationDbContext.UpdateRange(entities);
             await this.applicationDbContext.SaveChangesAsync(cancellationToken);
         }
+
+        public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
+        {
+            this.applicationDbContext.Remove(entity);
+            await this.applicationDbContext.SaveChangesAsync(cancellationToken);
+        }
     }
 }

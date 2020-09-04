@@ -22,7 +22,7 @@ namespace DndGameTracker.Commands
         {
             var campaign = await this.campaignRepository.FindAsync(new object[] { request.Id }, cancellationToken);
 
-            if(campaign == null)
+            if(campaign == null || campaign.Deleted)
             {
                 return null;
             }

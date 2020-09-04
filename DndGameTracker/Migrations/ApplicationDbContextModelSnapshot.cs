@@ -91,6 +91,9 @@ namespace DndGameTracker.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -102,6 +105,7 @@ namespace DndGameTracker.Migrations
                         new
                         {
                             Id = 1,
+                            Deleted = true,
                             Name = "Dragon Wild"
                         });
                 });
