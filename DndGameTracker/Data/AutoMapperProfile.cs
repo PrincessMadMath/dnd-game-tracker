@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DndGameTracker.Commands;
 using DndGameTracker.Dtos;
 using DndGameTracker.Entities;
 
@@ -11,6 +12,8 @@ namespace DndGameTracker.Data
         {
             CreateMap<CampaignDto, Campaign>()
                 .ReverseMap();
+
+            CreateMap<CreateCampaignCommand, Campaign>();
 
             CreateMap<CharacterDto, Character>()
                 .ReverseMap();

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DndGameTracker.Commands;
 using DndGameTracker.Dtos;
 using DndGameTracker.Entities;
 using DndGameTracker.Queries;
@@ -34,7 +35,7 @@ namespace DndGameTracker.Controllers
         }
 
         // GET api/<GamesController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCampaign")]
         public async Task<IActionResult> Get(int id)
         {
             var campaign = await this.mediator.Send(new GetCampaignByIdQuery { Id = id });
@@ -49,8 +50,11 @@ namespace DndGameTracker.Controllers
 
         // POST api/<GamesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> PostAsync([FromBody] CreateCampaignCommand command)
         {
+            var campaign = await this.mediator.Send(command);
+
+            return CreatedAtAction("GetCampaign", new { campaign.Id }, mapper.Map<CampaignDto>(campaign));
         }
 
         // PUT api/<GamesController>/5
